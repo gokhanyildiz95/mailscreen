@@ -1,0 +1,19 @@
+.main {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100px;
+    height: 200px;
+}
+
+.textedit {
+    display: flex;
+}
+
+.mailedit {
+    display: flex;
+}
+
+.container-flud {
+    position: relative;
+}

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Hello, world!</title>
+    <link rel="stylesheet" href="../templates/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.ckeditor.com/4.15.0/basic/ckeditor.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script>
+        function myFunction() {
+            if (document.getElementById("cc").style.display == "none") {
+                document.getElementById("cc").style.visibility = "visible";
+                document.getElementById("cc").style.display = "block";
+
+            } else {
+                document.getElementById("cc").style.visibility = "hidden";
+                document.getElementById("cc").style.display = "none";
+
+            }
+
+        }
+    </script>
+
+    <style>
+        .main {}
+        
+        .textedit {}
+        
+        .mailedit {}
+        
+        .dropdown {
+            font-size: small;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            color: #085fa1;
+        }
+        
+        .sendmail {}
+        
+        .container-flud {
+            background-color: #f3f2f1;
+            padding: 0px 15px;
+            height: 100%;
+        }
+        
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+        
+        .mailto {
+            margin-left: 10px;
+        }
+        
+        .sendbtn {
+            width: 6rem;
+        }
+        
+        .btnsize {}
+        
+        .sendtomail {}
+        
+        .text {
+            width: 100%;
+        }
+        
+        .deletebtn {
+            width: 6rem;
+        }
+        
+        .formbtn {
+            width: 3rem;
+            background: #e9ecef;
+        }
+        
+        .cc {
+            visibility: hidden;
+            display: none;
+        }
+        
+        .inpt {
+            width: 60px;
+        }
+        
+        .file-field.big .file-path-wrapper {
+            height: 3.2rem;
+        }
+        
+        .file-field.big .file-path-wrapper .file-path {
+            height: 3rem;
+        }
+        /* === Wrapper Styles === */
+        
+        #FileUpload {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .wrapper {
+            margin: 30px;
+            padding: 10px;
+            box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+            border-radius: 10px;
+            background-color: white;
+            width: 415px;
+        }
+        /* === Upload Box === */
+        
+        .upload {
+            margin: 10px;
+            height: 85px;
+            border: 8px dashed #e6f5e9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+        }
+        
+        .upload p {
+            margin-top: 12px;
+            line-height: 0;
+            font-size: 22px;
+            color: #0c3214;
+            letter-spacing: 1.5px;
+        }
+        
+        .upload__button {
+            background-color: #e6f5e9;
+            border-radius: 10px;
+            padding: 0px 8px 0px 10px;
+        }
+        
+        .upload__button:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        /* === Uploaded Files === */
+        
+        .uploaded {
+            width: 375px;
+            margin: 10px;
+            background-color: #e6f5e9;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        
+        .file {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .file__name {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: baseline;
+            width: 300px;
+            line-height: 0;
+            color: #0c3214;
+            font-size: 18px;
+            letter-spacing: 1.5px;
+        }
+        
+        .fa-times:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        
+        .file_class {
+            padding: 15px;
+            font-size: 40px;
+            color: #0c3214;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="container-flud">
+        <div class="row d-flex align-items-center mt-1 ">
+            <div class="col-md-6 textedit d-flex justify-content-start align-items-center">
+                <div class="sendbtn">
+                    <button type="button" onclick="myFunction()" class=" align-items-center justify-content-center mx-auto sendbtn d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                            class=" d-flex align-items-center mr-1 fa fa-send"></span>Gönder</button>
+
+                </div>
+                <div class="deletebtn ml-3">
+                    <button type="button" class="d-flex align-items-center justify-content-center ml-1 deletebtn mx-auto flex-fill d-flex btn-sm btn btn-outline-danger bd-highlight"><span
+                            class=" d-flex align-items-center mr-1 fa fa-trash"></span>İptal</button>
+
+                </div>
+                <div class="deletebtn ml-3">
+                    <button type="file" class="d-flex align-items-center justify-content-center ml-1 mx-auto flex-fill d-flex deletebtn btn-sm btn btn-outline-secondary bd-highlight"><span
+                            class=" d-flex align-items-center mr-1 fa fa-paperclip "></span>Ekle</button>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <span class="btn btn-default btn-file">
+                            <input id="input_file" type="file" class="file" multiple data-show-upload="true"
+                                data-show-caption="true">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class=" col-md-6 textedit d-flex align-items-centerjustify-content-end">
+                <select class=" col-md-6 form-control form-control-sm" id="select_mailbox">
+                    <option selected value="none">-Kimden-</option>
+                </select>
+                <select id="select_template" class="col-md-6 form-control form-control-sm">
+                    <option value="none" selected>-Şablon Listesi-</option>
+                </select>
+            </div>
+        </div>
+        <div class="row d-flex align-items-center mt-1 ">
+            <div class="input-group col-md-12 input-group-sm mb-1 ">
+                <div class="input-group-prepend position-relative ">
+                    <button onclick="myFunction()" data-toggle="tooltip" title="Cc Bcc" class="inpt btn input-group-text" id="inputGroup-sizing-sm ">Kime<span id="arrow"
+                            class="ml-1 fa fa-arrow-circle-o-down"></span></button>
+                </div>
+                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="col-md-12 cc" id="cc">
+                <div class="input-group input-group-sm mb-1">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text inpt " id="inputGroup-sizing-sm ">Cc</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group input-group-sm mb-1">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text inpt" id="inputGroup-sizing-sm ">Bcc</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+            </div>
+        </div>
+        <div class=" sendmail">
+
+            <!--textarea-->
+            <div class=" text">
+                <textarea id="editor1" name="editor1"></textarea>
+            </div>
+
+        </div>
+        <div id="file_upload_area">
+
+
+        </div>
+    </div>
+
+</body>
+
+<html>
+<!-- ---------------------------------------------------------------->
+
+<script>
+    function filename_checker(file_name) {
+        if ($(`div[file_name_hash|=${file_name.hashCode()}]`).length) {
+            filename_checker(`${file_name}1`);
+        }
+
+        return file_name;
+
+    }
+
+    function create_file_div(file_name) {
+        var split = file_name.split(".")
+        var extension = split[split.length - 1]
+        var file_type_map = {
+            "pdf": "fa-file-pdf-o",
+            "xls": "fa-excel",
+            "xlsx": "fa-excel"
+        }
+        if (file_type_map[extension] == undefined) {
+            file_type = "fa-file";
+        } else {
+            file_type = file_type_map[extension];
+        }
+        var file_name_hash = file_name.hashCode();
+        var p_file_name = file_name;
+        if (file_name.length > 20) {
+            p_file_name = file_name.substring(0, 20) + "...";
+        }
+        var html = `<div class="uploaded" file_name_hash="${file_name_hash}">
+                <i class="fa ${file_type} file_class"></i>
+                <div class="file">
+                    <div class="file__name">
+                        <p title="${file_name}">${p_file_name}</p>
+                        <i class="fa fa-times" onclick="delete_file_div('${file_name}')"></i>
+                    </div>
+                    <div class="progress" progress_hash="${file_name_hash}">
+                        <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                    </div>
+                </div>
+            </div>`;
+
+        $("#file_upload_area").append(html);
+    }
+
+    var uploaded_file_size = 0;
+
+    var h = (window.innerHeight) - 250;
+    CKEDITOR.replace('editor1', {
+        width: '100%',
+        height: h,
+        uiColor: '#CCEAEE',
+        contentsCss: [
+            'http://cdn.ckeditor.com/4.15.0/full-all/contents.css',
+            'https://ckeditor.com/docs/vendors/4.15.0/ckeditor/assets/css/classic.css'
+        ]
+    });
+
+    function delete_file_div(file_name) {
+        var file_id = $(`div[file_name_hash|=${file_name.hashCode()}]`).attr("id");
+        $.ajax({
+            type: 'GET',
+            url: `https://sahra.mobikob.com/filesystem/file/${file_id}/delete/`,
+            success: function(resp) {
+                $(`#${file_id}`).remove();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+
+            }
+        });
+
+    }
+
+    Object.defineProperty(String.prototype, 'hashCode', {
+        value: function() {
+            var hash = 0,
+                i, chr;
+            for (i = 0; i < this.length; i++) {
+                chr = this.charCodeAt(i);
+                hash = ((hash << 5) - hash) + chr;
+                hash |= 0; // Convert to 32bit integer
+            }
+            return hash;
+        }
+    });
+
+    $(document).ready(function() {
+
+
+        $("#input_file").click(function() {
+            $(this).val("");
+        });
+
+        $("#input_file").change(function() {
+            var file = event.target.files;
+            var formData = new FormData();
+            var check_file_size = 0;
+            var allowed_size = 15728640
+            formData.append("mailbox", 'test');
+            for (var i = 0; i < file.length; i++) {
+                var file_name = slugify(file[i].name, "fileformat");
+                file_name = filename_checker(file_name);
+                check_file_size = file[i].size + check_file_size
+                formData.append(`file_${i}`, file[i], file_name);
+                console.log("local", file_name);
+                create_file_div(file_name);
+            }
+            var total_size = uploaded_file_size + check_file_size
+            if (total_size <= allowed_size) {
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'https://sahra.mobikob.com/mobimail/upload_attachment/',
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function(resp) {
+                        console.log(resp);
+                        $.each(resp, function(index, item) {
+                            uploaded_file_size = item.size + uploaded_file_size;
+                            console.log("sunucu", item.filename);
+
+                            $(`div[file_name_hash|=${item.filename.hashCode()}]`).attr("id", item.content);
+                            $(`div[progress_hash="${item.filename.hashCode()}"]`).remove();
+                        });
+
+                    }
+                });
+            } else if (total_size > allowed_size) {
+                swal.fire({
+                    allowOutsideClick: false,
+                    title: 'Uyarı',
+                    text: `
+                            İzin Verilen Dosya Boyutu En Fazla $ {
+                                formatUntis(allowed_size)
+                            }
+                            `,
+                    type: 'warning'
+                })
+                $("#input_file").val("");;
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: `https://sahra.mobikob.com/mobimail/mailbox/all/fetch/`,
+            success: function(resp) {
+                $.each(resp, function(index, item) {
+                    var o =
+                        `<option username="${item.username}" value="${item.i_mailbox}">${item.display_name}</>`;
+                    $("#select_mailbox").append(o);
+                });
+                $("#select_mailbox").val("none");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: `https://sahra.mobikob.com/mobimail/markt_mail/template/all/fetch/`,
+            success: function(resp) {
+                $.each(resp, function(index, item) {
+                    var o =
+                        `<option value="${item.id}">${item.name}</>`;
+                    $("#select_template").append(o);
+                });
+                $("#select_template").val("none");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+
+            }
+        });
+
+    });
+
+    $("#select_template").change(function() {
+        template_id = this.value;
+        if (template_id == "none") {
+            CKEDITOR.instances.editor1.setData("");
+            return;
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: `https://sahra.mobikob.com/mobimail/markt_mail/template/${template_id}/fetch/`,
+            success: function(resp) {
+                console.log(resp);
+                CKEDITOR.instances.editor1.setData(resp.html);
+
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+
+            }
+        });
+
+
+
+    }); //onready bitiş--------------------
+
+    function slugify(text, case_status = "lower") {
+        if (case_status == "upper") {
+            return text.toString().toUpperCase()
+                .replace(/\s+/g, '-') // Replace spaces with -
+                .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+                .replace(/\-\-+/g, '-') // Replace multiple - with single -
+                .replace(/^-+/, '') // Trim - from start of text
+                .replace(/-+$/, '').replace("-", ""); // Trim - from end of text
+        }
+        if (case_status == "fileformat") {
+
+            text = text.toString().replace("ç", "c").replace("Ç", "C").replace("ğ", "g")
+                .replace("Ğ", "G").replace("ı", "i").replace("İ", "I").replace("ö", "o")
+                .replace("Ö", "O").replace("ş", "s").replace("Ş", "S").replace("ü", "u")
+                .replace("Ü", "U");
+
+            return text.replace(/\s+/g, '-') // Replace spaces with -
+                .replace(/[^\w\-\.]+/g, '') // Remove all non-word chars
+                .replace(/\-\-+/g, '-') // Replace multiple - with single -
+                .replace(/^-+/, '') // Trim - from start of text
+                .replace(/-+$/, '').replace("-", "_");
+        }
+        return text.toString().toLowerCase()
+            .replace(/\s+/g, '-') // Replace spaces with -
+            .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+            .replace(/\-\-+/g, '-') // Replace multiple - with single -
+            .replace(/^-+/, '') // Trim - from start of text
+            .replace(/-+$/, '').replace("-", ""); // Trim - from end of text
+    }
+</script>

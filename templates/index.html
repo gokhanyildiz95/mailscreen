@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Hello, world!</title>
-    <link rel="stylesheet" href="../templates/index.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.ckeditor.com/4.15.0/basic/ckeditor.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script>
         function myFunction() {
@@ -53,6 +54,7 @@
         body {
             height: 100%;
             margin: 0;
+            background: #f3f2f1;
         }
         
         .mailto {
@@ -72,6 +74,10 @@
         }
         
         .deletebtn {
+            width: 6rem;
+        }
+        
+        .addfiles {
             width: 6rem;
         }
         
@@ -104,18 +110,16 @@
         }
         
         .wrapper {
-            margin: 30px;
-            padding: 10px;
+            margin: 10px;
+            padding: 5px;
             box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
             border-radius: 10px;
             background-color: white;
-            width: 415px;
+            width: 215px;
         }
         /* === Upload Box === */
         
         .upload {
-            margin: 10px;
-            height: 85px;
             border: 8px dashed #e6f5e9;
             display: flex;
             justify-content: center;
@@ -124,7 +128,7 @@
         }
         
         .upload p {
-            margin-top: 12px;
+            margin-top: 8px;
             line-height: 0;
             font-size: 22px;
             color: #0c3214;
@@ -144,7 +148,7 @@
         /* === Uploaded Files === */
         
         .uploaded {
-            width: 375px;
+            width: 25rem;
             margin: 10px;
             background-color: #e6f5e9;
             border-radius: 10px;
@@ -167,8 +171,8 @@
             width: 300px;
             line-height: 0;
             color: #0c3214;
-            font-size: 18px;
-            letter-spacing: 1.5px;
+            font-size: 14px;
+            letter-spacing: 1px;
         }
         
         .fa-times:hover {
@@ -181,6 +185,15 @@
             font-size: 40px;
             color: #0c3214;
         }
+        
+        .kimden {
+            margin-right: 10px;
+        }
+        
+        .attachment {
+            visibility: hidden;
+            display: none;
+        }
     </style>
 
 
@@ -189,37 +202,33 @@
 <body>
     <div class="container-flud">
         <div class="row d-flex align-items-center mt-1 ">
-            <div class="col-md-6 textedit d-flex justify-content-start align-items-center">
+            <div class="col-md-3 textedit d-flex justify-content-between align-items-center">
                 <div class="sendbtn">
-                    <button type="button" onclick="myFunction()" class=" align-items-center justify-content-center mx-auto sendbtn d-flex btn-sm btn btn-outline-primary bd-highlight"><span
-                            class=" d-flex align-items-center mr-1 fa fa-send"></span>Gönder</button>
+                    <button id="send_button" type="button" onclick="myFunction()" class=" align-items-center justify-content-center mx-auto sendbtn d-flex btn-sm btn btn-outline-primary bd-highlight"><span class=" d-flex align-items-center mr-1 fa fa-send"></span>Gönder</button>
 
                 </div>
-                <div class="deletebtn ml-3">
-                    <button type="button" class="d-flex align-items-center justify-content-center ml-1 deletebtn mx-auto flex-fill d-flex btn-sm btn btn-outline-danger bd-highlight"><span
-                            class=" d-flex align-items-center mr-1 fa fa-trash"></span>İptal</button>
+                <div class="deletebtn ml-1">
+                    <button type="button" class=" d-flex align-items-center justify-content-center ml-1 deletebtn mx-auto flex-fill d-flex btn-sm btn btn-outline-danger bd-highlight"><span class=" d-flex align-items-center mr-1 fa fa-trash"></span>İptal</button>
 
                 </div>
-                <div class="deletebtn ml-3">
-                    <button type="file" id="custom_file_btn" class="d-flex align-items-center justify-content-center ml-1 mx-auto flex-fill d-flex deletebtn btn-sm btn btn-outline-secondary bd-highlight"><span
-                            class=" d-flex align-items-center mr-1 fa fa-paperclip "></span>Ekle</button>
+                <div class="addfiles ml-1">
+                    <button type="file" id="custom_file_btn" class="d-flex align-items-center justify-content-center ml-1 mx-auto flex-fill d-flex deletebtn btn-sm btn btn-outline-secondary bd-highlight" value=""><span class=" d-flex align-items-center mr-1 fa fa-paperclip "></span>Ekle</button>
                 </div>
-                <div class="form-group">
-                    <div class="col-sm-9">
+                <div class="form-group attachment col-md-3">
+                    <div class="col-md-9">
                         <span class="btn btn-default btn-file">
-                            <input id="input_file" type="file" style="display:none;" class="file" multiple data-show-upload="true"
-                                data-show-caption="true">
+                            <input id="input_file" type="file" style="display:none;" class="file" multiple="" data-show-upload="true" data-show-caption="true">
                         </span>
                     </div>
                 </div>
             </div>
-            <div class=" col-md-6 textedit d-flex align-items-centerjustify-content-end">
-                <select class=" col-md-6 form-control form-control-sm" id="select_mailbox">
-                    <option selected value="none">-Kimden-</option>
-                </select>
-                <select id="select_template" class="col-md-6 form-control form-control-sm">
-                    <option value="none" selected>-Şablon Listesi-</option>
-                </select>
+            <div class="col-md-9 textedit d-flex align-items-center justify-content-end">
+                <select class="col-md-3 kimden form-control form-control-sm" id="select_mailbox">
+                    <option selected="" value="none">-Kimden-</option>
+                <option username="destek@sahratelekom.com" value="6">Sahra Telekom Destek</option><option username="tarife@sahratelekom.com" value="7">Sahra Telekom Tarife</option><option username="teknik@sahratelekom.com" value="5">Sahra Telekom Teknik</option><option username="gokhan@sahratelekom.com" value="13">gökhan yıldız</option><option username="info@sahratelekom.com" value="11">Sahra Telekom Info</option><option username="crm@sahratelekom.com" value="12">CRM Sahra</option></select>
+                <select id="select_template" class="col-md-3 form-control form-control-sm">
+                    <option value="none" selected="">-Şablon Listesi-</option>
+                <option value="5e0f29cf6fb85c27919582c6">Sth TL Tarife</option><option value="5e2985226fb85c5b5d40b5ef">Tarife İmza</option><option value="5e32b52f6fb85c67ebf29e29">Tarife Şablon</option><option value="5e32d63d6fb85c7f5678b927">Türkiye Fiyatları Tarife</option><option value="5e3933cc6fb85c288052fe5f">sahra_int_callcenter</option><option value="5e43af776fb85c41a7e19afd">Teknik imza</option><option value="5e56383f6fb85c37e065513e">50 firma için örnek mail</option><option value="5e58c7076fb85c15a70b6ab8">callshop_tarife</option><option value="5eb540a26fb85c6752bfd274">CRM_tanıtım</option><option value="5ecfa05b6fb85c0ed89303c4">Module Promotion Mobimail</option><option value="5ecfc9d06fb85c0784aeae48">Module Promotion Chat</option><option value="5ecfc9fe6fb85c0781c2afb2">Module Promotion SMS</option><option value="5ecfca2f6fb85c0788d9965f">Module Promotion Task</option><option value="5ecfca5b6fb85c0788d99660">Module Promotion CRM</option><option value="5ecfca836fb85c0783e984df">Module Promotion PBX</option><option value="5ecfcb426fb85c078792eb5d">Module Promotion Authentications</option><option value="5ede04116fb85c36f490592f">Sahra/Cli manupulasyon</option><option value="5ef1e5fd6fb85c054a243c6e">Hasan İmza</option></select>
             </div>
         </div>
         <div class="row d-flex align-items-center mt-1 ">
@@ -269,7 +278,6 @@
         if ($(`div[file_name_hash|=${file_name.hashCode()}]`).length) {
             filename_checker(`${file_name}1`);
         }
-
         return file_name;
 
     }
@@ -279,8 +287,18 @@
         var extension = split[split.length - 1]
         var file_type_map = {
             "pdf": "fa-file-pdf-o",
-            "xls": "fa-excel",
-            "xlsx": "fa-excel"
+            "xls": "fa-file-excel-o",
+            "xlsx": "fa-file-excel-o",
+            "doc": "fa-file-word-o",
+            "docx": "fa-file-word-o",
+            "ppt": "fa-file-powerpoint-o",
+            "pptx": "fa-file-powerpoint-o",
+            "png": "fa-file-image-o",
+            "PNG": "fa-file-image-o",
+            "JPG": "fa-file-image-o",
+            "jpg": "fa-file-image-o",
+            "jpeg": "fa-file-image-o",
+            "JPEG": "fa-file-image-o",
         }
         if (file_type_map[extension] == undefined) {
             file_type = "fa-file";
@@ -367,7 +385,7 @@
             var file = event.target.files;
             var formData = new FormData();
             var check_file_size = 0;
-            var allowed_size = 15728640
+            var allowed_size = 10
             formData.append("mailbox", 'test');
             for (var i = 0; i < file.length; i++) {
                 var file_name = slugify(file[i].name, "fileformat");
@@ -379,7 +397,7 @@
             }
             var total_size = uploaded_file_size + check_file_size
             if (total_size <= allowed_size) {
-
+                $("#send_button").prop("disabled", true);
                 $.ajax({
                     type: 'POST',
                     url: 'https://sahra.mobikob.com/mobimail/upload_attachment/',
@@ -393,24 +411,26 @@
                             uploaded_file_size = item.size + uploaded_file_size;
                             console.log("sunucu", item.filename);
 
-                            $(`div[file_name_hash|=${item.filename.hashCode()}]`).attr("id", item.content);
-                            $(`div[progress_hash="${item.filename.hashCode()}"]`).remove();
+                            $(`div[file_name_hash|=${item.filename.hashCode()}]`)
+                                .attr("id", item.content);
+                            console.log("sunucu", item.filename);
+
+                            $(`div[progress_hash="${item.filename.hashCode()}"]`)
+                                .remove();
                         });
 
+                    },
+                    complete: function(resp) {
+                        $("#send_button").prop("disabled", false);
                     }
                 });
             } else if (total_size > allowed_size) {
-                swal.fire({
-                    allowOutsideClick: false,
-                    title: 'Uyarı',
-                    text: `
-                            İzin Verilen Dosya Boyutu En Fazla $ {
-                                formatUntis(allowed_size)
-                            }
-                            `,
-                    type: 'warning'
-                })
-                $("#input_file").val("");;
+                JQuery.notify({
+                    title: "Welcome:",
+                    message: "This plugin has been provided to you by Robert McIntosh aka mouse0270"
+                });
+                $("#input_file").val("");
+                return;
             }
         });
 

@@ -7,27 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Hello, world!</title>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.ckeditor.com/4.15.0/basic/ckeditor.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css" rel="stylesheet">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@3.1.3/bootstrap-notify.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
-    <script>
-        function myFunction() {
-            if (document.getElementById("cc").style.display == "none") {
-                document.getElementById("cc").style.visibility = "visible";
-                document.getElementById("cc").style.display = "block";
 
-            } else {
-                document.getElementById("cc").style.visibility = "hidden";
-                document.getElementById("cc").style.display = "none";
 
-            }
-
-        }
-    </script>
 
     <style>
         .main {}
@@ -74,7 +64,7 @@
         }
         
         .deletebtn {
-            width: 6rem;
+            width: 5.6rem;
         }
         
         .addfiles {
@@ -110,21 +100,24 @@
         }
         
         .wrapper {
+            margin: 30px;
+            padding: 10px;
             margin: 10px;
             padding: 5px;
             box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
             border-radius: 10px;
             background-color: white;
+            width: 415px;
             width: 215px;
         }
         /* === Upload Box === */
         
         .upload {
+            margin: 10px;
+            height: 85px;
             border: 8px dashed #e6f5e9;
             display: flex;
             justify-content: center;
-            align-items: center;
-            border-radius: 5px;
         }
         
         .upload p {
@@ -148,8 +141,6 @@
         /* === Uploaded Files === */
         
         .uploaded {
-            width: 25rem;
-            margin: 10px;
             background-color: #e6f5e9;
             border-radius: 10px;
             display: flex;
@@ -168,7 +159,6 @@
             flex-direction: row;
             justify-content: space-between;
             align-items: baseline;
-            width: 300px;
             line-height: 0;
             color: #0c3214;
             font-size: 14px;
@@ -182,7 +172,7 @@
         
         .file_class {
             padding: 15px;
-            font-size: 40px;
+            font-size: 30px;
             color: #0c3214;
         }
         
@@ -194,6 +184,12 @@
             visibility: hidden;
             display: none;
         }
+        
+        .alertNotif {
+            visibility: hidden;
+            display: none;
+            opacity: 0.5;
+        }
     </style>
 
 
@@ -201,14 +197,17 @@
 
 <body>
     <div class="container-flud">
-        <div class="row d-flex align-items-center mt-1 ">
+
+        <div class="row d-flex align-items-center mt-1 justify-content-between">
             <div class="col-md-3 textedit d-flex justify-content-between align-items-center">
                 <div class="sendbtn">
-                    <button id="send_button" type="button" onclick="myFunction()" class=" align-items-center justify-content-center mx-auto sendbtn d-flex btn-sm btn btn-outline-primary bd-highlight"><span class=" d-flex align-items-center mr-1 fa fa-send"></span>Gönder</button>
+                    <button id="send_button" type="button" onclick="sendNotif()" class=" align-items-center justify-content-center mx-auto sendbtn d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                            class=" d-flex align-items-center mr-1 fa fa-send"></span>Gönder</button>
 
                 </div>
                 <div class="deletebtn ml-1">
-                    <button type="button" class=" d-flex align-items-center justify-content-center ml-1 deletebtn mx-auto flex-fill d-flex btn-sm btn btn-outline-danger bd-highlight"><span class=" d-flex align-items-center mr-1 fa fa-trash"></span>İptal</button>
+                    <button type="button" class=" d-flex align-items-center justify-content-center ml-1 deletebtn mx-auto flex-fill d-flex btn-sm btn btn-outline-danger bd-highlight"><span
+                            class=" d-flex align-items-center mr-1 fa fa-trash"></span>İptal</button>
 
                 </div>
                 <div class="addfiles ml-1">
@@ -217,24 +216,49 @@
                 <div class="form-group attachment col-md-3">
                     <div class="col-md-9">
                         <span class="btn btn-default btn-file">
-                            <input id="input_file" type="file" style="display:none;" class="file" multiple="" data-show-upload="true" data-show-caption="true">
+                            <input id="input_file" type="file" style="display:none;" class="file" multiple=""
+                                data-show-upload="true" data-show-caption="true">
                         </span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-9 textedit d-flex align-items-center justify-content-end">
+            <div class="col-md-8 textedit d-flex align-items-center justify-content-end">
                 <select class="col-md-3 kimden form-control form-control-sm" id="select_mailbox">
                     <option selected="" value="none">-Kimden-</option>
-                <option username="destek@sahratelekom.com" value="6">Sahra Telekom Destek</option><option username="tarife@sahratelekom.com" value="7">Sahra Telekom Tarife</option><option username="teknik@sahratelekom.com" value="5">Sahra Telekom Teknik</option><option username="gokhan@sahratelekom.com" value="13">gökhan yıldız</option><option username="info@sahratelekom.com" value="11">Sahra Telekom Info</option><option username="crm@sahratelekom.com" value="12">CRM Sahra</option></select>
+                    <option username="destek@sahratelekom.com" value="6">Sahra Telekom Destek</option>
+                    <option username="tarife@sahratelekom.com" value="7">Sahra Telekom Tarife</option>
+                    <option username="teknik@sahratelekom.com" value="5">Sahra Telekom Teknik</option>
+                    <option username="gokhan@sahratelekom.com" value="13">gökhan yıldız</option>
+                    <option username="info@sahratelekom.com" value="11">Sahra Telekom Info</option>
+                    <option username="crm@sahratelekom.com" value="12">CRM Sahra</option>
+                </select>
                 <select id="select_template" class="col-md-3 form-control form-control-sm">
                     <option value="none" selected="">-Şablon Listesi-</option>
-                <option value="5e0f29cf6fb85c27919582c6">Sth TL Tarife</option><option value="5e2985226fb85c5b5d40b5ef">Tarife İmza</option><option value="5e32b52f6fb85c67ebf29e29">Tarife Şablon</option><option value="5e32d63d6fb85c7f5678b927">Türkiye Fiyatları Tarife</option><option value="5e3933cc6fb85c288052fe5f">sahra_int_callcenter</option><option value="5e43af776fb85c41a7e19afd">Teknik imza</option><option value="5e56383f6fb85c37e065513e">50 firma için örnek mail</option><option value="5e58c7076fb85c15a70b6ab8">callshop_tarife</option><option value="5eb540a26fb85c6752bfd274">CRM_tanıtım</option><option value="5ecfa05b6fb85c0ed89303c4">Module Promotion Mobimail</option><option value="5ecfc9d06fb85c0784aeae48">Module Promotion Chat</option><option value="5ecfc9fe6fb85c0781c2afb2">Module Promotion SMS</option><option value="5ecfca2f6fb85c0788d9965f">Module Promotion Task</option><option value="5ecfca5b6fb85c0788d99660">Module Promotion CRM</option><option value="5ecfca836fb85c0783e984df">Module Promotion PBX</option><option value="5ecfcb426fb85c078792eb5d">Module Promotion Authentications</option><option value="5ede04116fb85c36f490592f">Sahra/Cli manupulasyon</option><option value="5ef1e5fd6fb85c054a243c6e">Hasan İmza</option></select>
+                    <option value="5e0f29cf6fb85c27919582c6">Sth TL Tarife</option>
+                    <option value="5e2985226fb85c5b5d40b5ef">Tarife İmza</option>
+                    <option value="5e32b52f6fb85c67ebf29e29">Tarife Şablon</option>
+                    <option value="5e32d63d6fb85c7f5678b927">Türkiye Fiyatları Tarife</option>
+                    <option value="5e3933cc6fb85c288052fe5f">sahra_int_callcenter</option>
+                    <option value="5e43af776fb85c41a7e19afd">Teknik imza</option>
+                    <option value="5e56383f6fb85c37e065513e">50 firma için örnek mail</option>
+                    <option value="5e58c7076fb85c15a70b6ab8">callshop_tarife</option>
+                    <option value="5eb540a26fb85c6752bfd274">CRM_tanıtım</option>
+                    <option value="5ecfa05b6fb85c0ed89303c4">Module Promotion Mobimail</option>
+                    <option value="5ecfc9d06fb85c0784aeae48">Module Promotion Chat</option>
+                    <option value="5ecfc9fe6fb85c0781c2afb2">Module Promotion SMS</option>
+                    <option value="5ecfca2f6fb85c0788d9965f">Module Promotion Task</option>
+                    <option value="5ecfca5b6fb85c0788d99660">Module Promotion CRM</option>
+                    <option value="5ecfca836fb85c0783e984df">Module Promotion PBX</option>
+                    <option value="5ecfcb426fb85c078792eb5d">Module Promotion Authentications</option>
+                    <option value="5ede04116fb85c36f490592f">Sahra/Cli manupulasyon</option>
+                    <option value="5ef1e5fd6fb85c054a243c6e">Hasan İmza</option>
+                </select>
             </div>
         </div>
         <div class="row d-flex align-items-center mt-1 ">
             <div class="input-group col-md-12 input-group-sm mb-1 ">
                 <div class="input-group-prepend position-relative ">
-                    <button onclick="myFunction()" data-toggle="tooltip" title="Cc Bcc" class="inpt btn input-group-text" id="inputGroup-sizing-sm ">Kime<span id="arrow"
+                    <button onclick="openList()" data-toggle="tooltip" title="Cc Bcc" class="inpt btn input-group-text" id="inputGroup-sizing-sm ">Kime<span id="arrow"
                             class="ml-1 fa fa-arrow-circle-o-down"></span></button>
                 </div>
                 <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
@@ -262,9 +286,9 @@
             </div>
 
         </div>
-        <div id="file_upload_area">
-
-
+        <div class="col-md-6">
+            <div id="file_upload_area">
+            </div>
         </div>
     </div>
 
@@ -274,6 +298,8 @@
 <!-- ---------------------------------------------------------------->
 
 <script>
+    var uploaded_file_size = 0;
+
     function filename_checker(file_name) {
         if ($(`div[file_name_hash|=${file_name.hashCode()}]`).length) {
             filename_checker(`${file_name}1`);
@@ -282,7 +308,28 @@
 
     }
 
-    function create_file_div(file_name) {
+    function openList() {
+        if (document.getElementById("cc").style.display == "none") {
+            document.getElementById("cc").style.visibility = "visible";
+            document.getElementById("cc").style.display = "block";
+
+        } else {
+            document.getElementById("cc").style.visibility = "hidden";
+            document.getElementById("cc").style.display = "none";
+
+        }
+
+    }
+
+    function sendNotif() {
+
+        document.getElementById("notif").style.visibility = "visible";
+        document.getElementById("notif").style.display = "block";
+
+
+    }
+
+    function create_file_div(file_name, file_size) {
         var split = file_name.split(".")
         var extension = split[split.length - 1]
         var file_type_map = {
@@ -310,9 +357,9 @@
         if (file_name.length > 20) {
             p_file_name = file_name.substring(0, 20) + "...";
         }
-        var html = `<div class="uploaded" file_name_hash="${file_name_hash}">
+        var html = `<div class="uploaded col-md-12" file_name_hash="${file_name_hash}" file_size="${file_size}">
                 <i class="fa ${file_type} file_class"></i>
-                <div class="file">
+                <div class="file col-md-10">
                     <div class="file__name">
                         <p title="${file_name}">${p_file_name}</p>
                         <i class="fa fa-times" onclick="delete_file_div('${file_name}')"></i>
@@ -326,7 +373,7 @@
         $("#file_upload_area").append(html);
     }
 
-    var uploaded_file_size = 0;
+
 
     var h = (window.innerHeight) - 250;
     CKEDITOR.replace('editor1', {
@@ -341,11 +388,14 @@
 
     function delete_file_div(file_name) {
         var file_id = $(`div[file_name_hash|=${file_name.hashCode()}]`).attr("id");
+        var file_size = $(`div[file_name_hash|=${file_name.hashCode()}]`).attr("file_size");
+
         $.ajax({
             type: 'GET',
             url: `https://sahra.mobikob.com/filesystem/file/${file_id}/delete/`,
             success: function(resp) {
                 $(`#${file_id}`).remove();
+                uploaded_file_size = uploaded_file_size - file_size;
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest.responseText);
@@ -381,22 +431,31 @@
             $(this).val("");
         });
 
+
         $("#input_file").change(function() {
             var file = event.target.files;
             var formData = new FormData();
             var check_file_size = 0;
-            var allowed_size = 10
+            var allowed_size = 5000000;
             formData.append("mailbox", 'test');
+            var file_names_to_create_file_uploads = new Array();
             for (var i = 0; i < file.length; i++) {
                 var file_name = slugify(file[i].name, "fileformat");
                 file_name = filename_checker(file_name);
                 check_file_size = file[i].size + check_file_size
                 formData.append(`file_${i}`, file[i], file_name);
                 console.log("local", file_name);
-                create_file_div(file_name);
+                file_names_to_create_file_uploads.push({
+                    "file_name": file_name,
+                    "file_size": file[i].size
+                });
             }
             var total_size = uploaded_file_size + check_file_size
             if (total_size <= allowed_size) {
+                $.each(file_names_to_create_file_uploads, function(index, item) {
+                    create_file_div(item.file_name, item.file_size);
+                });
+
                 $("#send_button").prop("disabled", true);
                 $.ajax({
                     type: 'POST',
@@ -425,9 +484,12 @@
                     }
                 });
             } else if (total_size > allowed_size) {
-                JQuery.notify({
-                    title: "Welcome:",
-                    message: "This plugin has been provided to you by Robert McIntosh aka mouse0270"
+                file_names_to_create_file_uploads = [];
+
+                $.notify({
+                    message: "15 mb den büyük dosya gönderilemez"
+                }, {
+                    type: "info"
                 });
                 $("#input_file").val("");
                 return;
@@ -496,6 +558,8 @@
 
             }
         });
+
+
 
 
 

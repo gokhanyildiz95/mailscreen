@@ -21,7 +21,8 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@3.1.3/bootstrap-notify.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css" id="theme-styles">
 
 
     <style>
@@ -195,6 +196,18 @@
             display: none;
             opacity: 0.5;
         }
+        
+        .selectize-input {
+            overflow: inherit;
+            border: 0px;
+            padding: 4px 4px;
+        }
+        
+        .selectize-dropdown,
+        .selectize-input,
+        .selectize-input input {
+            font-size: 12px !important;
+        }
     </style>
 
 
@@ -206,7 +219,7 @@
         <div class="row d-flex align-items-center mt-1 justify-content-between">
             <div class="col-md-3 textedit d-flex justify-content-between align-items-center">
                 <div class="sendbtn">
-                    <button id="send_button" type="button" onclick="sendNotif()" class=" align-items-center justify-content-center mx-auto sendbtn d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                    <button id="send_button" type="button" onclick="control_mail()" class=" align-items-center justify-content-center mx-auto sendbtn d-flex btn-sm btn btn-outline-primary bd-highlight"><span
                             class=" d-flex align-items-center mr-1 fa fa-send"></span>Gönder</button>
 
                 </div>
@@ -273,14 +286,20 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text inpt " id="inputGroup-sizing-sm ">Cc</span>
                     </div>
-                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                    <input id="mail_cc" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                 </div>
                 <div class="input-group input-group-sm mb-1">
                     <div class="input-group-prepend">
                         <span class="input-group-text inpt" id="inputGroup-sizing-sm ">Bcc</span>
                     </div>
-                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                    <input id="mail_bcc" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                 </div>
+            </div>
+            <div class="input-group col-md-12 input-group-sm mb-1 ">
+                <div class="input-group-prepend">
+                    <span class="input-group-text inpt" id="inputGroup-sizing-sm ">Konu</span>
+                </div>
+                <input id="mail_subject" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
             </div>
         </div>
         <div class=" sendmail">
@@ -305,6 +324,147 @@
 <script>
     var uploaded_file_size = 0;
     var customer_data = new Array();
+
+    function control_mail() {
+        var data = check_mail_form(); // chackmailform dan dönen cevabı atadık
+        if (data.result == false) {
+            if (data.type == "info") {
+                $.notify(data);
+                return;
+            }
+            if (data.type == "ask") {
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Gövde boş olarak gönderilsin mi?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Gönder',
+                    cancelButtonText: 'İptal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        send_mail();
+                    }
+                })
+            }
+
+        }
+        if (data.result == true) {
+            send_mail();
+        }
+
+    }
+
+    function identifyMailBody(body) {
+        return `<div class='mobimail-message' id='give_id'>${body}</div>`;
+    }
+
+    function prepareFormData() {
+        var conversation_id = "new";
+        var mail_body = CKEDITOR.instances.editor1.getData();
+        //conversation_message = identifyMailBody(conversation_message);
+        var mailbox = $("#select_mailbox option:selected").val();
+        var mail_from = $("#select_mailbox option:selected").attr("username");
+        var mail_to = $("#mail_to").val();
+        //var conversation_message_mailbox = $("#conversation_smtp_select option:selected").val();
+        var mail_subject = $("#mail_subject").val();
+        //var conversation_message_status = $('#send_selectboxstatus').val()
+        if ("new" != "new") conversation_message_subject = "<p>None</p>";
+
+        var mail_cc = $("#mail_cc").val();
+        var mail_bcc = $("#mail_bcc").val();
+
+        var attachments = new Array();
+
+        $.each($(".uploaded"), function(key, item) {
+            attachments.push(item.id);
+        })
+
+        attachments = attachments.join(",");
+
+        var tz = new Date().getTimezoneOffset();
+
+        var formData = new FormData();
+
+        formData.append("conversation_message_status", "status1")
+        formData.append("message", mail_body);
+        formData.append("customerid_list", []);
+        formData.append("deleted_files", []);
+        formData.append("send_from", mail_from);
+        formData.append("send_to", mail_to);
+        formData.append("mailbox", mailbox);
+        formData.append("send_cc", mail_cc);
+        formData.append("send_bcc", mail_bcc);
+        formData.append("subject", mail_subject);
+        formData.append("attachments", attachments);
+        formData.append("conversation_id", conversation_id);
+        formData.append("timezone", tz);
+
+        return formData;
+    }
+
+    function send_mail() {
+        var formData = prepareFormData();
+
+        $("#send_button").prop("disabled", true);
+        $.ajax({
+            type: 'POST',
+            url: `https://sahra.mobikob.com/mobimail/conversation/${formData.get("conversation_id")}/send_message/`,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(resp) {
+                alert("mail gönderildi");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+                $("#send_button").prop("disabled", false);
+            }
+        });
+    }
+
+
+
+    function check_mail_form() {
+        var mailbox = $('#select_mailbox').val();
+        var subject = $('#mail_subject').val();
+        var body = CKEDITOR.instances.editor1.getData();
+        var to = $('#mail_to').val();
+        console.log(subject);
+        if (mailbox == "none")
+            return {
+                result: false,
+                message: "Lütfen mail kutusu seçiniz",
+                type: "info"
+            }
+        if (!to)
+            return {
+                result: false,
+                message: "Lütfen kime kısmını seçiniz",
+                type: "info"
+            }
+        if (!subject)
+            return {
+                result: false,
+                message: "Konu alanı boş olamaz",
+                type: "info"
+            }
+
+        if (!body) {
+            return {
+                result: false,
+                message: "Posta gövde boş olarak gönderilsin mi?",
+                type: "ask"
+            }
+        }
+
+        return {
+            result: true
+        }
+    }
 
     function filename_checker(file_name) {
         if ($(`div[file_name_hash|=${file_name.hashCode()}]`).length) {
@@ -427,6 +587,8 @@
     });
 
     var mail_to_selectize;
+    var mail_cc_selectize;
+    var mail_bcc_selectize;
 
     function render_mail_to(data) {
         var search_mail_to = $("#mail_to").selectize({
@@ -459,6 +621,80 @@
 
         mail_to_selectize = search_mail_to[0].selectize;
     }
+    //--------------------------- Cc -------
+
+    var mail_cc_selectize;
+
+    function render_mail_cc(data) {
+        var search_mail_cc = $("#mail_cc").selectize({
+            plugins: ['remove_button'],
+            delimiter: ',',
+            persist: false,
+            maxItems: 3,
+            valueField: 'email',
+            labelField: 'name',
+            searchField: ['email', 'name'],
+            create: function(input) {
+                return {
+                    name: input,
+                    email: input,
+                    search: input,
+                }
+            },
+            options: data,
+            render: {
+                option: function(item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                        '<span class="name">' + escape(item.name) + '</span>' +
+                        '</span>' +
+                        '</div>';
+                }
+            },
+
+        });
+
+        mail_cc_selectize = search_mail_cc[0].selectize;
+    }
+
+    //--------------------------- bCc -------
+
+    var mail_bcc_selectize;
+
+    function render_mail_bcc(data) {
+        var search_mail_bcc = $("#mail_bcc").selectize({
+            plugins: ['remove_button'],
+            delimiter: ',',
+            persist: false,
+            maxItems: 3,
+            valueField: 'email',
+            labelField: 'name',
+            searchField: ['email', 'name'],
+            create: function(input) {
+                return {
+                    name: input,
+                    email: input,
+                    search: input,
+                }
+            },
+            options: data,
+            render: {
+                option: function(item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                        '<span class="name">' + escape(item.name) + '</span>' +
+                        '</span>' +
+                        '</div>';
+                }
+            },
+
+        });
+
+        mail_bcc_selectize = search_mail_bcc[0].selectize;
+    }
+
+
+
 
     $(document).ready(function() {
 
@@ -473,13 +709,16 @@
             success: function(resp) {
                 var data = new Array();
                 $.each(resp.data, function(key, value) {
-                    data.push({
-                        "name": value[1],
-                        "email": value[2]
-                    });
+                    if (value[1] != "" && value[2] != "") {
+                        data.push({
+                            "name": value[1],
+                            "email": value[2]
+                        });
+                    }
                 })
-                console.log(data);
                 render_mail_to(data);
+                render_mail_cc(data);
+                render_mail_bcc(data);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest.responseText);
@@ -488,7 +727,8 @@
 
             },
             beforeSend: function(xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + btoa("gokhan@sahratelekom.com" + ":" + "qaz123"));
+                xhr.setRequestHeader("Authorization", "Basic " + btoa("gokhan@sahratelekom.com" +
+                    ":" + "qaz123"));
             },
         });
 
@@ -509,7 +749,7 @@
             var file = event.target.files;
             var formData = new FormData();
             var check_file_size = 0;
-            var allowed_size = 5000000;
+            var allowed_size = 15000000;
             formData.append("mailbox", 'test');
             var file_names_to_create_file_uploads = new Array();
             for (var i = 0; i < file.length; i++) {

@@ -8,14 +8,19 @@
 
     <title>Hello, world!</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+
+    <script src="https://sahra.mobikob.com/static/js/selectize.js"></script>
+    <link rel="stylesheet" href="https://sahra.mobikob.com/static/css/selectize.css">
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.ckeditor.com/4.15.0/basic/ckeditor.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css" rel="stylesheet">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@3.1.3/bootstrap-notify.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    </script>
-
 
 
 
@@ -261,7 +266,7 @@
                     <button onclick="openList()" data-toggle="tooltip" title="Cc Bcc" class="inpt btn input-group-text" id="inputGroup-sizing-sm ">Kime<span id="arrow"
                             class="ml-1 fa fa-arrow-circle-o-down"></span></button>
                 </div>
-                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                <input id="mail_to" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
             </div>
             <div class="col-md-12 cc" id="cc">
                 <div class="input-group input-group-sm mb-1">
@@ -299,6 +304,7 @@
 
 <script>
     var uploaded_file_size = 0;
+    var customer_data = new Array();
 
     function filename_checker(file_name) {
         if ($(`div[file_name_hash|=${file_name.hashCode()}]`).length) {
@@ -420,7 +426,74 @@
         }
     });
 
+    var mail_to_selectize;
+
+    function render_mail_to(data) {
+        var search_mail_to = $("#mail_to").selectize({
+            plugins: ['remove_button'],
+            delimiter: ',',
+            persist: false,
+            maxItems: 3,
+            valueField: 'email',
+            labelField: 'name',
+            searchField: ['email', 'name'],
+            create: function(input) {
+                return {
+                    name: input,
+                    email: input,
+                    search: input,
+                }
+            },
+            options: data,
+            render: {
+                option: function(item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                        '<span class="name">' + escape(item.name) + '</span>' +
+                        '</span>' +
+                        '</div>';
+                }
+            },
+
+        });
+
+        mail_to_selectize = search_mail_to[0].selectize;
+    }
+
     $(document).ready(function() {
+
+
+
+        $.ajax({
+            type: 'POST',
+            url: `https://sahra.mobikob.com/crm/customers/all/get/`,
+            data: {
+                columns: "name,email"
+            },
+            success: function(resp) {
+                var data = new Array();
+                $.each(resp.data, function(key, value) {
+                    data.push({
+                        "name": value[1],
+                        "email": value[2]
+                    });
+                })
+                console.log(data);
+                render_mail_to(data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+
+            },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Authorization", "Basic " + btoa("gokhan@sahratelekom.com" + ":" + "qaz123"));
+            },
+        });
+
+
+
 
         $("#custom_file_btn").click(function() {
             $(this).val("");
@@ -457,6 +530,7 @@
                 });
 
                 $("#send_button").prop("disabled", true);
+                $("#custom_file_btn").prop("disabled", true);
                 $.ajax({
                     type: 'POST',
                     url: 'https://sahra.mobikob.com/mobimail/upload_attachment/',
@@ -481,6 +555,7 @@
                     },
                     complete: function(resp) {
                         $("#send_button").prop("disabled", false);
+                        $("#custom_file_btn").prop("disabled", false);
                     }
                 });
             } else if (total_size > allowed_size) {

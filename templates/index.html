@@ -43,7 +43,6 @@
         .container-flud {
             background-color: #f3f2f1;
             padding: 0px 15px;
-            height: 100%;
         }
         
         html,
@@ -82,12 +81,12 @@
             background: #e9ecef;
         }
         
-        .cc {
-            visibility: hidden;
-            display: none;
+        .inpt {
+            width: 60px;
+            cursor: pointer;
         }
         
-        .inpt {
+        .bcc {
             width: 60px;
         }
         
@@ -148,7 +147,8 @@
         
         .uploaded {
             background-color: #e6f5e9;
-            border-radius: 10px;
+            border-radius: 5px;
+            border: 1px solid #c0cec3;
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
@@ -167,7 +167,7 @@
             align-items: baseline;
             line-height: 0;
             color: #0c3214;
-            font-size: 14px;
+            font-size: 10px;
             letter-spacing: 1px;
         }
         
@@ -177,8 +177,8 @@
         }
         
         .file_class {
-            padding: 15px;
-            font-size: 30px;
+            padding: 3px;
+            font-size: 24px;
             color: #0c3214;
         }
         
@@ -201,6 +201,10 @@
             overflow: inherit;
             border: 0px;
             padding: 4px 4px;
+        }
+        
+        .progress {
+            height: 5px;
         }
         
         .selectize-dropdown,
@@ -282,19 +286,23 @@
                 <input id="mail_to" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
             </div>
             <div class="col-md-12 collapse" id="hidden_cc_area">
-                <div class="input-group input-group-sm mb-1">
+                <div data-toggle="collapse" data-target="#hidden_bcc_area" class="input-group input-group-sm mb-1">
                     <div class="input-group-prepend">
-                        <span class="input-group-text inpt " id="inputGroup-sizing-sm ">Cc</span>
+                        <span class="input-group-text inpt " id="inputGroup-sizing-sm ">Cc<span id="arrow"
+                            class="ml-3 fa fa-arrow-circle-o-down"></span></span>
                     </div>
                     <input id="mail_cc" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                 </div>
+            </div>
+            <div class="col-md-12 collapse" id="hidden_bcc_area">
                 <div class="input-group input-group-sm mb-1">
                     <div class="input-group-prepend">
-                        <span class="input-group-text inpt" id="inputGroup-sizing-sm ">Bcc</span>
+                        <span class="input-group-text bcc" id="inputGroup-sizing-sm ">Bcc</span>
                     </div>
-                    <input id="mail_bcc" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                    <input id="mail_cc" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                 </div>
             </div>
+
             <div class="input-group col-md-12 input-group-sm mb-1 ">
                 <div class="input-group-prepend">
                     <span class="input-group-text inpt" id="inputGroup-sizing-sm ">Konu</span>
@@ -311,10 +319,13 @@
             </div>
 
         </div>
-        <div class="row">
-            <div class="col-md-6" id="file_upload_area">
+        <!--         <div class=" col-md-12">
+            <div class="col-md-6 row" id="file_upload_area">
             </div>
-
+        </div> -->
+        <div class="col-md-12">
+            <div class="row justify-content-md-start" id="file_upload_area">
+            </div>
         </div>
     </div>
 </body>
@@ -525,9 +536,9 @@
         if (file_name.length > 20) {
             p_file_name = file_name.substring(0, 20) + "...";
         }
-        var html = `<div class="uploaded col-md-12" file_name_hash="${file_name_hash}" file_size="${file_size}">
+        var html = `<div class="uploaded col-md-4" file_name_hash="${file_name_hash}" file_size="${file_size}">
                 <i class="fa ${file_type} file_class"></i>
-                <div class="file col-md-11">
+                <div class="file col-md-12">
                     <div class="file__name">
                         <p title="${file_name}">${p_file_name}</p>
                         <i class="fa fa-times" onclick="delete_file_div('${file_name}')"></i>
@@ -543,7 +554,7 @@
 
 
 
-    var h = (window.innerHeight) - 250;
+    var h = ((window.innerHeight) - 190);
     CKEDITOR.replace('editor1', {
         width: '100%',
         height: h,
@@ -751,9 +762,11 @@
             var file = event.target.files;
             var formData = new FormData();
             var check_file_size = 0;
-            var allowed_size = 15000000;
+            var file_counter = 0;
+            var allowed_size = 15360000;
             formData.append("mailbox", 'test');
             var file_names_to_create_file_uploads = new Array();
+
             for (var i = 0; i < file.length; i++) {
                 var file_name = slugify(file[i].name, "fileformat");
                 file_name = filename_checker(file_name);
@@ -770,7 +783,11 @@
                 $.each(file_names_to_create_file_uploads, function(index, item) {
                     create_file_div(item.file_name, item.file_size);
                 });
-
+                $.notify({
+                    message: "Dosya eklendi"
+                }, {
+                    type: "info"
+                });
                 $("#send_button").prop("disabled", true);
                 $("#custom_file_btn").prop("disabled", true);
                 $.ajax({
@@ -785,7 +802,6 @@
                         $.each(resp, function(index, item) {
                             uploaded_file_size = item.size + uploaded_file_size;
                             console.log("sunucu", item.filename);
-
                             $(`div[file_name_hash|=${item.filename.hashCode()}]`)
                                 .attr("id", item.content);
                             console.log("sunucu", item.filename);
@@ -793,7 +809,6 @@
                             $(`div[progress_hash="${item.filename.hashCode()}"]`)
                                 .remove();
                         });
-
                     },
                     complete: function(resp) {
                         $("#send_button").prop("disabled", false);

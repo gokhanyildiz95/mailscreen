@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.ckeditor.com/4.15.0/basic/ckeditor.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css" rel="stylesheet">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@3.1.3/bootstrap-notify.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.js"></script>
@@ -276,12 +276,12 @@
         <div class="row d-flex align-items-center mt-1 ">
             <div class="input-group col-md-12 input-group-sm mb-1 ">
                 <div class="input-group-prepend position-relative ">
-                    <button onclick="openList()" data-toggle="tooltip" title="Cc Bcc" class="inpt btn input-group-text" id="inputGroup-sizing-sm ">Kime<span id="arrow"
+                    <button data-toggle="collapse" data-target="#hidden_cc_area" title="Cc Bcc" class="inpt btn input-group-text" id="inputGroup-sizing-sm ">Kime<span id="arrow"
                             class="ml-1 fa fa-arrow-circle-o-down"></span></button>
                 </div>
                 <input id="mail_to" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
             </div>
-            <div class="col-md-12 cc" id="cc">
+            <div class="col-md-12 collapse" id="hidden_cc_area">
                 <div class="input-group input-group-sm mb-1">
                     <div class="input-group-prepend">
                         <span class="input-group-text inpt " id="inputGroup-sizing-sm ">Cc</span>
@@ -307,19 +307,20 @@
             <!--textarea-->
             <div class=" text">
                 <textarea id="editor1" name="editor1"></textarea>
+
             </div>
 
         </div>
-        <div class="col-md-6">
-            <div id="file_upload_area">
+        <div class="row">
+            <div class="col-md-6" id="file_upload_area">
             </div>
+
         </div>
     </div>
-
 </body>
 
 <html>
-<!-- ---------------------------------------------------------------->
+<!-- ----------------------- SCRIPT ----------------------------------------->
 
 <script>
     var uploaded_file_size = 0;
@@ -389,8 +390,8 @@
 
         formData.append("conversation_message_status", "status1")
         formData.append("message", mail_body);
-        formData.append("customerid_list", []);
-        formData.append("deleted_files", []);
+        formData.append("customerid_list", JSON.stringify(new Array()));
+        formData.append("deleted_files", JSON.stringify(new Array()));
         formData.append("send_from", mail_from);
         formData.append("send_to", mail_to);
         formData.append("mailbox", mailbox);
@@ -415,6 +416,7 @@
             processData: false,
             contentType: false,
             success: function(resp) {
+                clear_mail_form();
                 alert("mail gönderildi");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -424,6 +426,19 @@
                 $("#send_button").prop("disabled", false);
             }
         });
+    }
+
+
+    function clear_mail_form() {
+        uploaded_file_size = 0;
+        $("#select_mailbox").val("none");
+        mail_to_selectize.clear();
+        mail_cc_selectize.clear();
+        mail_bcc_selectize.clear();
+        $("#mail_subject").val("");
+        CKEDITOR.instances.editor1.setData("");
+        $("#file_upload_area").html("");
+
     }
 
 
@@ -474,19 +489,6 @@
 
     }
 
-    function openList() {
-        if (document.getElementById("cc").style.display == "none") {
-            document.getElementById("cc").style.visibility = "visible";
-            document.getElementById("cc").style.display = "block";
-
-        } else {
-            document.getElementById("cc").style.visibility = "hidden";
-            document.getElementById("cc").style.display = "none";
-
-        }
-
-    }
-
     function sendNotif() {
 
         document.getElementById("notif").style.visibility = "visible";
@@ -525,7 +527,7 @@
         }
         var html = `<div class="uploaded col-md-12" file_name_hash="${file_name_hash}" file_size="${file_size}">
                 <i class="fa ${file_type} file_class"></i>
-                <div class="file col-md-10">
+                <div class="file col-md-11">
                     <div class="file__name">
                         <p title="${file_name}">${p_file_name}</p>
                         <i class="fa fa-times" onclick="delete_file_div('${file_name}')"></i>

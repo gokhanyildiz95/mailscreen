@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url
 from mobimail import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index),
+    url(r'conversation/new/', views.new_conversation),
+    url(r'conversation/(?P<conversation_id>.*)/', views.view_conversation),
 ]

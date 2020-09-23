@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Hello, world!</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+    <style>
+        .main {
+            border-radius: 10px;
+        }
+        
+        .main_us {
+            background: #fafae6;
+            border-radius: 10px;
+            padding: 2rem;
+        }
+        
+        .header {
+            border-bottom: 2px solid #007bff80;
+            padding: 8px;
+        }
+        
+        .mail_title {
+            background: #f3f0f0;
+            border: 1px solid #7fbdff;
+            border-bottom: 0px;
+            border-radius: 10px 10px 0px 0px;
+        }
+        
+        .resp_mail {
+            border-bottom: 1px solid #007bff80;
+        }
+        
+        .mail_prop {
+            color: #007bff80;
+        }
+        
+        .mail_content {
+            border: 1px solid #7fbdff;
+            padding: 3rem;
+        }
+        
+        .mail_buttons {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <!-- <div class="container-flud">
+        <div class="header col-md-12 ">
+            <div class="input-group col-md-12 input-group-sm mb-1 ">
+                <div class="input-group-prepend position-relative ">
+                    <span class="inpt font-weight-bold ml-3 mail_prop" id="inputGroup-sizing-sm ">Kime :</span>
+                </div>
+                <div id="conversation_mail_to" class="resp_mail col-md-11" aria-label="Small"> </div>
+            </div>
+            <div class="row col-md-12 d-flex">
+                <div class="col-md-3 d-flex justify-content-center align-items-center"><span class="mail_prop font-weight-bold">Konu :</span><span id="conversation_subject"></span>
+                </div>
+                <div class="col-md-3 d-flex justify-content-center align-items-center"><span class="mail_prop font-weight-bold">Muhattap :</span><span id="conversation_send_to"></span>
+                </div>
+                <div class="col-md-3 d-flex justify-content-center align-items-center"><span class="mail_prop font-weight-bold">ID :</span><span id="conversation_id"></span></div>
+                <div class="col-md-3 d-flex justify-content-center align-items-center"><span class="mail_prop font-weight-bold">Tarih :</span><span id="conversation_date"></span>
+                </div>
+            </div>
+        </div> -->
+    <div class="container-flud">
+        <div class="col-md-12 mt-2">
+            <div class="main col-md-12 ">
+                <div class="mail_title d-flex justify-content-between">
+                    <div class="col-md-8 position-relative">
+                        <div class="col-md-12 header_${from_whom}">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Kimden :</div>
+                                <div class="col-md-10">
+                                    <span>${current_mail_to}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Kime :
+                                </div>
+                                <div class="col-md-10">
+                                    <span>${current_mail_to}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Konu :
+                                </div>
+                                <div class="col-md-10">
+                                    <span>${current_mail_subject}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    CC :
+                                </div>
+                                <div class="col-md-10">
+                                    <span>${current_mail_cc}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    BCC :
+                                </div>
+                                <div class="col-md-10">
+                                    <span>${current_mail_bcc}</span>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center justify-content-center">
+                        <div class="main_button row d-flex justify-content-center">
+                            <div class="col-md-1 mr-2 d-flex align-items-center justify-content-center">
+                                <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                                        class=" d-flex align-items-center fa fa-send"></span></button>
+                            </div>
+                            <div class="col-md-1 mr-2 d-flex align-items-center justify-content-center">
+                                <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                                        class=" d-flex align-items-center fa fa-code-fork"></span></button>
+                            </div>
+                            <div class="col-md-1 mr-2 d-flex align-items-center justify-content-center">
+                                <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                                        class=" d-flex align-items-center fa fa-code"></span></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class=" mail_content" id="mails_div">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+<html>
+<!-------------------------- SCRIPT --------------------------------------------------------------------------------------------------------------->
+
+<script>
+    var conversation_id = location.pathname.split('/')[2];
+    console.log(conversation_id)
+
+    function create_mail_view(mail_obj) {
+        var from_whom = "div_mail_opponent";
+        if (mail_obj.i_smtp) {
+            from_whom = "div_mail_us";
+        }
+
+
+        var current_mail_from = mail_obj.mail_from[0].name;
+
+        var current_mail_to = new Array();
+        $.each(mail_obj.mail_to, function(key, item) {
+            current_mail_to.push(item.email);
+        });
+        current_mail_to = current_mail_to.join("; ");
+
+        var current_mail_cc = new Array();
+        $.each(mail_obj.mail_cc, function(key, item) {
+            current_mail_cc.push(item.email);
+        });
+        current_mail_cc = current_mail_cc.join("; ");
+
+        var current_mail_bcc = new Array();
+        $.each(mail_obj.mail_bcc, function(key, item) {
+            current_mail_bcc.push(item.email);
+        });
+        current_mail_bcc = current_mail_bcc.join("; ");
+
+        // mail subject
+        var current_mail_subject = mail_obj.subject;
+
+        var current_mail_date = mail_obj.mail_pdate;
+
+        var current_mail_attachments = [];
+        $.each(mail_obj.attachments, function(key, item) {
+            var filename = item.filename;
+            if (filename.length > 20) {
+                filename = filename.substring(0, 20) + "...";
+            }
+            var part1 = item.attachment_id.$uuid.substring(0, 8);
+            var part2 = item.attachment_id.$uuid.substring(8, 12);
+            var part3 = item.attachment_id.$uuid.substring(12, 16);
+            var part4 = item.attachment_id.$uuid.substring(16, 20);
+            var part5 = item.attachment_id.$uuid.substring(20, 32);
+            var attachment_id = `${part1}-${part2}-${part3}-${part4}-${part5}`;
+            var href =
+                `https://sahra.mobikob.com/mobimail/mail/${mail_obj._id.$oid}/attachment/${attachment_id}/download/`;
+            console.log(href);
+            var a = `<a title="${item.filename}" href="${href}" target="_blank">${filename}</a>`;
+            current_mail_attachments.push(a);
+        });
+        current_mail_attachments = current_mail_attachments.join(" ");
+
+        var current_mail_html = `
+        <div class="">
+                    <div class="body_${from_whom}">${mail_obj.body.html}</div>
+                </div>`;
+        return current_mail_html;
+
+
+        var current_mail_html = `<div class="">
+                <div class=" header_${from_whom}">
+                    <div class="row"
+                        <div class="col-md-2">
+                            Kimden :
+                        </div>
+                        <div class="col-md-10">
+                            <span>${current_mail_to}</span>
+                        </div>
+                    </div>
+                    <div class="row"
+                        <div class="col-md-2">
+                            Kime :
+                        </div>
+                        <div class="col-md-10">
+                            <span>${current_mail_subject}</span>
+                        </div>
+                    </div>
+                    <div class="row"
+                        <div class="col-md-2">
+                            CC :
+                        </div>
+                        <div class="col-md-10">
+                            <span>${current_mail_cc}</span>
+                        </div>
+                    </div>
+                    <div class="row"
+                        <div class="col-md-2">
+                            BCC :
+                        </div>
+                        <div class="col-md-10">
+                            <span>${current_mail_bcc}</span>
+                        </div>
+                    </div>
+                    <div class="row"
+                        <div class="col-md-2">
+                            Ekler :
+                        </div>
+                        <div class="col-md-10">
+                            <span>${current_mail_attachments}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="body_${from_whom}">${mail_obj.body.html}</div>s
+                </div>
+            </div>`;
+
+        //return current_mail_html;
+    }
+
+
+    $(document).ready(function() {
+
+        var conversation_id = location.pathname.split('/')[2];
+        console.log(conversation_id)
+
+        $.ajax({
+            type: 'GET',
+            url: `https://sahra.mobikob.com/mobimail/conversation/${conversation_id}/mail/last/fetch/`,
+
+            success: function(resp) {
+                console.log(resp);
+                var html = create_mail_view(resp);
+                $("#mails_div").append(html);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+
+            },
+
+        });
+
+
+
+
+
+
+    });
+</script>

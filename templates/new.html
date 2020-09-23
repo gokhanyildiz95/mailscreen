@@ -26,19 +26,11 @@
 
 
     <style>
-        .main {}
-        
-        .textedit {}
-        
-        .mailedit {}
-        
         .dropdown {
             font-size: small;
             font-family: Georgia, Times, 'Times New Roman', serif;
             color: #085fa1;
         }
-        
-        .sendmail {}
         
         .container-flud {
             background-color: #f3f2f1;
@@ -52,17 +44,9 @@
             background: #f3f2f1;
         }
         
-        .mailto {
-            margin-left: 10px;
-        }
-        
         .sendbtn {
             width: 6rem;
         }
-        
-        .btnsize {}
-        
-        .sendtomail {}
         
         .text {
             width: 100%;
@@ -74,11 +58,6 @@
         
         .addfiles {
             width: 6rem;
-        }
-        
-        .formbtn {
-            width: 3rem;
-            background: #e9ecef;
         }
         
         .inpt {
@@ -191,12 +170,6 @@
             display: none;
         }
         
-        .alertNotif {
-            visibility: hidden;
-            display: none;
-            opacity: 0.5;
-        }
-        
         .selectize-input {
             overflow: inherit;
             border: 0px;
@@ -205,6 +178,10 @@
         
         .progress {
             height: 5px;
+        }
+        
+        .arrow {
+            margin-left: 19px;
         }
         
         .selectize-dropdown,
@@ -289,7 +266,7 @@
                 <div data-toggle="collapse" data-target="#hidden_bcc_area" class="input-group input-group-sm mb-1">
                     <div class="input-group-prepend">
                         <span class="input-group-text inpt " id="inputGroup-sizing-sm ">Cc<span id="arrow"
-                            class="ml-3 fa fa-arrow-circle-o-down"></span></span>
+                            class="arrow fa fa-arrow-circle-o-down"></span></span>
                     </div>
                     <input id="mail_cc" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                 </div>
@@ -299,7 +276,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text bcc" id="inputGroup-sizing-sm ">Bcc</span>
                     </div>
-                    <input id="mail_cc" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                    <input id="mail_bcc" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                 </div>
             </div>
 
@@ -319,10 +296,6 @@
             </div>
 
         </div>
-        <!--         <div class=" col-md-12">
-            <div class="col-md-6 row" id="file_upload_area">
-            </div>
-        </div> -->
         <div class="col-md-12">
             <div class="row justify-content-md-start" id="file_upload_area">
             </div>
@@ -331,9 +304,10 @@
 </body>
 
 <html>
-<!-- ----------------------- SCRIPT ----------------------------------------->
+<!-- ----------------------- SCRIPT --------------------------------------------------------------------------------------------------------------->
 
 <script>
+
     var uploaded_file_size = 0;
     var customer_data = new Array();
 
@@ -375,13 +349,10 @@
     function prepareFormData() {
         var conversation_id = "new";
         var mail_body = CKEDITOR.instances.editor1.getData();
-        //conversation_message = identifyMailBody(conversation_message);
         var mailbox = $("#select_mailbox option:selected").val();
         var mail_from = $("#select_mailbox option:selected").attr("username");
         var mail_to = $("#mail_to").val();
-        //var conversation_message_mailbox = $("#conversation_smtp_select option:selected").val();
         var mail_subject = $("#mail_subject").val();
-        //var conversation_message_status = $('#send_selectboxstatus').val()
         if ("new" != "new") conversation_message_subject = "<p>None</p>";
 
         var mail_cc = $("#mail_cc").val();
@@ -428,7 +399,11 @@
             contentType: false,
             success: function(resp) {
                 clear_mail_form();
-                alert("mail gönderildi");
+                Swal.fire({
+                    title: 'Mail Gönderildi',
+                    html: '',
+                    allowOutsideClick: () => !Swal.isLoading(),
+                });
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest.responseText);
@@ -451,8 +426,6 @@
         $("#file_upload_area").html("");
 
     }
-
-
 
     function check_mail_form() {
         var mailbox = $('#select_mailbox').val();
@@ -554,7 +527,7 @@
 
 
 
-    var h = ((window.innerHeight) - 190);
+    var h = ((window.innerHeight) - 215);
     CKEDITOR.replace('editor1', {
         width: '100%',
         height: h,
@@ -624,7 +597,7 @@
             plugins: ['remove_button'],
             delimiter: ',',
             persist: false,
-            maxItems: 3,
+            maxItems: 1,
             valueField: 'email',
             labelField: 'name',
             searchField: ['email', 'name'],
@@ -640,7 +613,7 @@
                 option: function(item, escape) {
                     return '<div>' +
                         '<span class="title">' +
-                        '<span class="name">' + escape(item.name) + '</span>' +
+                        '<span class="name">' + escape(item.name) + '<br/>' + escape(item.email) + '</span>' +
                         '</span>' +
                         '</div>';
                 }
@@ -659,7 +632,7 @@
             plugins: ['remove_button'],
             delimiter: ',',
             persist: false,
-            maxItems: 3,
+            maxItems: 5,
             valueField: 'email',
             labelField: 'name',
             searchField: ['email', 'name'],
@@ -675,7 +648,7 @@
                 option: function(item, escape) {
                     return '<div>' +
                         '<span class="title">' +
-                        '<span class="name">' + escape(item.name) + '</span>' +
+                        '<span class="name">' + escape(item.name) + '<br/>' + escape(item.email) + '</span>' +
                         '</span>' +
                         '</div>';
                 }
@@ -695,7 +668,7 @@
             plugins: ['remove_button'],
             delimiter: ',',
             persist: false,
-            maxItems: 3,
+            maxItems: 5,
             valueField: 'email',
             labelField: 'name',
             searchField: ['email', 'name'],
@@ -711,7 +684,7 @@
                 option: function(item, escape) {
                     return '<div>' +
                         '<span class="title">' +
-                        '<span class="name">' + escape(item.name) + '</span>' +
+                        '<span class="name">' + escape(item.name) + '<br/>' + escape(item.email) + '</span>' +
                         '</span>' +
                         '</div>';
                 }
@@ -835,7 +808,7 @@
                 file_names_to_create_file_uploads = [];
 
                 $.notify({
-                    message: "15 mb den büyük dosya gönderilemez"
+                    message: "Gönderilecek dosya 15 MB 'den fazla olamaz"
                 }, {
                     type: "info"
                 });

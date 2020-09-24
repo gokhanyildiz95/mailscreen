@@ -29,13 +29,18 @@
         
         .header {
             border-bottom: 2px solid #007bff80;
-            padding: 8px;
+            padding: 4px;
+            background: #e7f6e6;
         }
         
         .mail_title {
-            background: #f3f0f0;
+            background: #f8f8df;
             border: 1px solid #7fbdff;
             border-bottom: 0px;
+            margin-left: 0.01rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 5px 5px 0px 0px;
             border-radius: 10px 10px 0px 0px;
         }
         
@@ -52,9 +57,15 @@
             padding: 3rem;
         }
         
-        .mail_buttons {
-            width: 30px;
-            height: 30px;
+        .mail_box_style {
+            border: 1px solid #7fbdff;
+            padding: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .main_button {
+            margin-top: 4rem;
         }
     </style>
 
@@ -62,102 +73,118 @@
 </head>
 
 <body>
-    <!-- <div class="container-flud">
+    <div class="container-flud">
         <div class="header col-md-12 ">
             <div class="input-group col-md-12 input-group-sm mb-1 ">
                 <div class="input-group-prepend position-relative ">
-                    <span class="inpt font-weight-bold ml-3 mail_prop" id="inputGroup-sizing-sm ">Kime :</span>
-                </div>
-                <div id="conversation_mail_to" class="resp_mail col-md-11" aria-label="Small"> </div>
-            </div>
-            <div class="row col-md-12 d-flex">
-                <div class="col-md-3 d-flex justify-content-center align-items-center"><span class="mail_prop font-weight-bold">Konu :</span><span id="conversation_subject"></span>
-                </div>
-                <div class="col-md-3 d-flex justify-content-center align-items-center"><span class="mail_prop font-weight-bold">Muhattap :</span><span id="conversation_send_to"></span>
-                </div>
-                <div class="col-md-3 d-flex justify-content-center align-items-center"><span class="mail_prop font-weight-bold">ID :</span><span id="conversation_id"></span></div>
-                <div class="col-md-3 d-flex justify-content-center align-items-center"><span class="mail_prop font-weight-bold">Tarih :</span><span id="conversation_date"></span>
                 </div>
             </div>
-        </div> -->
-    <div class="container-flud">
-        <div class="col-md-12 mt-2">
-            <div class="main col-md-12 ">
-                <div class="mail_title d-flex justify-content-between">
-                    <div class="col-md-8 position-relative">
-                        <div class="col-md-12 header_${from_whom}">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    Kimden :</div>
-                                <div class="col-md-10">
-                                    <span>${current_mail_to}</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    Kime :
-                                </div>
-                                <div class="col-md-10">
-                                    <span>${current_mail_to}</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    Konu :
-                                </div>
-                                <div class="col-md-10">
-                                    <span>${current_mail_subject}</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    CC :
-                                </div>
-                                <div class="col-md-10">
-                                    <span>${current_mail_cc}</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    BCC :
-                                </div>
-                                <div class="col-md-10">
-                                    <span>${current_mail_bcc}</span>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-
+            <div class="row ml-2 col-md-12 d-flex">
+                <div class="col-md row align-items-center">
+                    <div class="">
+                        <span class="mail_prop font-weight-bold">Konu :&nbsp;</span>
                     </div>
-                    <div class="col-md-4 d-flex align-items-center justify-content-center">
-                        <div class="main_button row d-flex justify-content-center">
-                            <div class="col-md-1 mr-2 d-flex align-items-center justify-content-center">
-                                <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
-                                        class=" d-flex align-items-center fa fa-send"></span></button>
-                            </div>
-                            <div class="col-md-1 mr-2 d-flex align-items-center justify-content-center">
-                                <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
-                                        class=" d-flex align-items-center fa fa-code-fork"></span></button>
-                            </div>
-                            <div class="col-md-1 mr-2 d-flex align-items-center justify-content-center">
-                                <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
-                                        class=" d-flex align-items-center fa fa-code"></span></button>
-                            </div>
-                        </div>
+                    <div>
+                        <span id="conversation_subject"></span>
                     </div>
-
                 </div>
-                <div class=" mail_content" id="mails_div">
-
+                <div class="col-md row align-items-center"><span class="mail_prop font-weight-bold">Muhattap :&nbsp;</span><span id="conversation_opponent"></span>
                 </div>
-
+                <div class="col-md-4 row align-items-center">
+                    <div>
+                        <span class="mail_prop font-weight-bold">ID :&nbsp;</span>
+                    </div>
+                    <div>
+                        <span id="main_conversation_id"></span>
+                    </div>
+                </div>
+                <div class="col-md d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn btn-outline-success"><span class="fa fa-reply"></span>Yanıtla</button>
+                    <button title="Tüm konuşmayı görmek için tıklayınız" type="button" class=" ml-1 btn btn-outline-info"><span class="fa fa-list-ul"></span> Tümünü Göster</button>
+                </div>
             </div>
         </div>
-    </div>
+
+        <div id="mails_div">
+        </div>
+        <!-- ------------------------------------------------------------------------------------------------------------------------------------- -->
+        <div class="container-flud">
+            <div class="col-md-12 mt-1">
+                <div class="main col-md-12 ">
+                    <div class="mail_title row col-md-12">
+                        <div class="col-md-8">
+                            <div class=" header_${from_whom}">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Kimden :</div>
+                                    <div class="col-md-10">
+                                        <span>${current_mail_from}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Kime :
+                                    </div>
+                                    <div class="col-md-10">
+                                        <span>${current_mail_to}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Konu :
+                                    </div>
+                                    <div class="col-md-10">
+                                        <span>${current_mail_subject}</span>
+                                    </div>
+                                </div>
+                                <div id="cc" class="row">
+                                    <div class="col-md-2">
+                                        Cc :
+                                    </div>
+                                    <div class="col-md-10">
+                                        <span>${current_mail_cc}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Ekler :
+                                    </div>
+                                    <div class="col-md-10 ">
+                                        <div id="attachment_files">${current_mail_attachments} , ${current_mail_attachments},${current_mail_attachments}</div>
+                                    </div>
+                                </div>
 
 
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="date row d-flex justify-content-end">
+                                ${mail_date}
+                            </div>
+                            <div class="main_button row d-flex justify-content-end">
+                                <div class=" mr-2 d-flex align-items-center justify-content-center">
+                                    <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                                            class=" d-flex align-items-center fa fa-send"></span></button>
+                                </div>
+                                <div class=" mr-2 d-flex align-items-center justify-content-center">
+                                    <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                                            class=" d-flex align-items-center fa fa-code-fork"></span></button>
+                                </div>
+                                <div class=" d-flex align-items-center justify-content-center">
+                                    <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                                            class=" d-flex align-items-center fa fa-code"></span></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mail_box_style">
+                        <div class="body_${from_whom}">${mail_obj.body.html}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 </body>
 
 <html>
@@ -165,7 +192,6 @@
 
 <script>
     var conversation_id = location.pathname.split('/')[2];
-    console.log(conversation_id)
 
     function create_mail_view(mail_obj) {
         var from_whom = "div_mail_opponent";
@@ -174,7 +200,15 @@
         }
 
 
-        var current_mail_from = mail_obj.mail_from[0].name;
+        var current_mail_from = mail_obj.mail_from[0].email;
+
+        var date = mail_obj.mail_pdate;
+        var mail_dates = new Date(date).toISOString().substring(0, 16).replace("T", " ");
+        var year = mail_dates.substring(0, 4);
+        var mounth = mail_dates.substring(8, 10);
+        var day = mail_dates.substring(5, 7);
+        var time = mail_dates.substring(11, 16);
+        var mail_date = `${day}.${mounth}.${year} ${time}`;
 
         var current_mail_to = new Array();
         $.each(mail_obj.mail_to, function(key, item) {
@@ -188,6 +222,7 @@
         });
         current_mail_cc = current_mail_cc.join("; ");
 
+        // mail bcc
         var current_mail_bcc = new Array();
         $.each(mail_obj.mail_bcc, function(key, item) {
             current_mail_bcc.push(item.email);
@@ -196,9 +231,9 @@
 
         // mail subject
         var current_mail_subject = mail_obj.subject;
-
+        //mail date
         var current_mail_date = mail_obj.mail_pdate;
-
+        // mail attachments
         var current_mail_attachments = [];
         $.each(mail_obj.attachments, function(key, item) {
             var filename = item.filename;
@@ -220,68 +255,91 @@
         current_mail_attachments = current_mail_attachments.join(" ");
 
         var current_mail_html = `
-        <div class="">
-                    <div class="body_${from_whom}">${mail_obj.body.html}</div>
-                </div>`;
+        <div class="container-flud">
+            <div class="col-md-12 mt-1">
+                <div class="main col-md-12 ">
+                    <div class="mail_title row col-md-12">
+                        <div class="col-md-8">
+                            <div class=" header_${from_whom}">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Kimden :</div>
+                                    <div class="col-md-10">
+                                        <span>${current_mail_from}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Kime :
+                                    </div>
+                                    <div class="col-md-10">
+                                        <span>${current_mail_to}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Konu :
+                                    </div>
+                                    <div class="col-md-10">
+                                        <span>${current_mail_subject}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Cc :
+                                    </div>
+                                    <div class="col-md-10">
+                                        <span>${current_mail_cc}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Ekler :
+                                    </div>
+                                    <div class="col-md-10 ">
+                                        <div id="attachment_files">${current_mail_attachments} , ${current_mail_attachments},${current_mail_attachments}</div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="date row d-flex justify-content-end">
+                                ${mail_date}
+                            </div>
+                            <div class="main_button row d-flex justify-content-end">
+                                <div class=" mr-2 d-flex align-items-center justify-content-center">
+                                    <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                                            class=" d-flex align-items-center fa fa-send"></span></button>
+                                </div>
+                                <div class=" mr-2 d-flex align-items-center justify-content-center">
+                                    <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                                            class=" d-flex align-items-center fa fa-code-fork"></span></button>
+                                </div>
+                                <div class=" d-flex align-items-center justify-content-center">
+                                    <button type="button" class=" align-items-center justify-content-center mx-auto d-flex btn-sm btn btn-outline-primary bd-highlight"><span
+                                            class=" d-flex align-items-center fa fa-code"></span></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mail_box_style">
+                        <div class="body_${from_whom}">${mail_obj.body.html}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    `;
         return current_mail_html;
 
-
-        var current_mail_html = `<div class="">
-                <div class=" header_${from_whom}">
-                    <div class="row"
-                        <div class="col-md-2">
-                            Kimden :
-                        </div>
-                        <div class="col-md-10">
-                            <span>${current_mail_to}</span>
-                        </div>
-                    </div>
-                    <div class="row"
-                        <div class="col-md-2">
-                            Kime :
-                        </div>
-                        <div class="col-md-10">
-                            <span>${current_mail_subject}</span>
-                        </div>
-                    </div>
-                    <div class="row"
-                        <div class="col-md-2">
-                            CC :
-                        </div>
-                        <div class="col-md-10">
-                            <span>${current_mail_cc}</span>
-                        </div>
-                    </div>
-                    <div class="row"
-                        <div class="col-md-2">
-                            BCC :
-                        </div>
-                        <div class="col-md-10">
-                            <span>${current_mail_bcc}</span>
-                        </div>
-                    </div>
-                    <div class="row"
-                        <div class="col-md-2">
-                            Ekler :
-                        </div>
-                        <div class="col-md-10">
-                            <span>${current_mail_attachments}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="body_${from_whom}">${mail_obj.body.html}</div>s
-                </div>
-            </div>`;
-
-        //return current_mail_html;
     }
 
 
     $(document).ready(function() {
 
-        var conversation_id = location.pathname.split('/')[2];
-        console.log(conversation_id)
 
         $.ajax({
             type: 'GET',
@@ -301,7 +359,38 @@
 
         });
 
+        $.ajax({
+            type: 'GET',
+            url: `https://sahra.mobikob.com/mobimail/conversation/${conversation_id}/fetch/`,
 
+            success: function(resp) {
+                //opponent main conversation
+                var opponent = `${resp.opponent.email}`;
+                if (resp.customer_id) {
+                    opponent = `<span title="${resp.opponent.email}">${resp.customer_id}</span>`;
+                }
+                $("#conversation_opponent").html(opponent);
+
+                //subject main conversation
+                var subject = `${resp.subject}`;
+                $("#conversation_subject").html(subject);
+                console.log(subject)
+
+                //id main conversation
+                var id = `${resp.conversation_id}`;
+                id = id.substring(9, 45);
+                console.log(id);
+                $("#main_conversation_id").html(id);
+
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+
+            },
+
+        });
 
 
 

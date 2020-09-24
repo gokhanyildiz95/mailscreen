@@ -308,6 +308,17 @@
 
 <script>
 
+    var conversation_id = location.pathname.split('/')[2];
+    var mail_id;
+    var page_type = "new";
+    if (conversation_id!="new"){
+        page_type = location.pathname.split('/')[3];
+        if (page_type!="reply"){
+            page_type = location.pathname.split('/')[5];
+            mail_id = location.pathname.split('/')[4];
+        }
+    }
+
     var uploaded_file_size = 0;
     var customer_data = new Array();
 
@@ -347,7 +358,7 @@
     }
 
     function prepareFormData() {
-        var conversation_id = "new";
+        var conversation_id_to_send = conversation_id;
         var mail_body = CKEDITOR.instances.editor1.getData();
         var mailbox = $("#select_mailbox option:selected").val();
         var mail_from = $("#select_mailbox option:selected").attr("username");
@@ -381,7 +392,7 @@
         formData.append("send_bcc", mail_bcc);
         formData.append("subject", mail_subject);
         formData.append("attachments", attachments);
-        formData.append("conversation_id", conversation_id);
+        formData.append("conversation_id", conversation_id_to_send);
         formData.append("timezone", tz);
 
         return formData;
@@ -389,21 +400,27 @@
 
     function send_mail() {
         var formData = prepareFormData();
-
+        var send_mail_url = `https://sahra.mobikob.com/mobimail/conversation/${formData.get("conversation_id")}/send_message/`;
+        if (page_type=="forward"){
+            send_mail_url = `https://sahra.mobikob.com/mobimail/conversation/${formData.get("conversation_id")}/mail/${mail_id}/forward_message/`;
+        }
         $("#send_button").prop("disabled", true);
         $.ajax({
             type: 'POST',
-            url: `https://sahra.mobikob.com/mobimail/conversation/${formData.get("conversation_id")}/send_message/`,
+            url: send_mail_url,
             data: formData,
             processData: false,
             contentType: false,
             success: function(resp) {
-                clear_mail_form();
+                //clear_mail_form();
+                /*
                 Swal.fire({
                     title: 'Mail Gönderildi',
                     html: '',
                     allowOutsideClick: () => !Swal.isLoading(),
-                });
+                });*/
+                
+                window.close();
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest.responseText);
@@ -414,7 +431,7 @@
         });
     }
 
-
+    /*
     function clear_mail_form() {
         uploaded_file_size = 0;
         $("#select_mailbox").val("none");
@@ -426,6 +443,7 @@
         $("#file_upload_area").html("");
 
     }
+    */
 
     function check_mail_form() {
         var mailbox = $('#select_mailbox').val();
@@ -481,7 +499,7 @@
 
     }
 
-    function create_file_div(file_name, file_size) {
+    function create_file_div(file_name, file_size,delete_on_server) {
         var split = file_name.split(".")
         var extension = split[split.length - 1]
         var file_type_map = {
@@ -514,7 +532,7 @@
                 <div class="file col-md-12">
                     <div class="file__name">
                         <p title="${file_name}">${p_file_name}</p>
-                        <i class="fa fa-times" onclick="delete_file_div('${file_name}')"></i>
+                        <i class="fa fa-times" onclick="delete_file_div('${file_name}',${delete_on_server})"></i>
                     </div>
                     <div class="progress" progress_hash="${file_name_hash}">
                         <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width:100%"></div>
@@ -554,24 +572,31 @@
         ]
     });
 
-    function delete_file_div(file_name) {
+    function delete_file_div(file_name,delete_on_server) {
         var file_id = $(`div[file_name_hash|=${file_name.hashCode()}]`).attr("id");
         var file_size = $(`div[file_name_hash|=${file_name.hashCode()}]`).attr("file_size");
 
-        $.ajax({
-            type: 'GET',
-            url: `https://sahra.mobikob.com/filesystem/file/${file_id}/delete/`,
-            success: function(resp) {
-                $(`#${file_id}`).remove();
-                uploaded_file_size = uploaded_file_size - file_size;
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                console.log(XMLHttpRequest.responseText);
-            },
-            complete: function() {
+        if (delete_on_server){
+            $.ajax({
+                type: 'GET',
+                url: `https://sahra.mobikob.com/filesystem/file/${file_id}/delete/`,
+                success: function(resp) {
+                    $(`#${file_id}`).remove();
+                    uploaded_file_size = uploaded_file_size - file_size;
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest.responseText);
+                },
+                complete: function() {
 
-            }
-        });
+                }
+            });
+        }
+        else{
+            $(`#${file_id}`).remove();
+            uploaded_file_size = uploaded_file_size - file_size;
+        }
+        
 
     }
 
@@ -622,6 +647,7 @@
         });
 
         mail_to_selectize = search_mail_to[0].selectize;
+
     }
     //--------------------------- Cc -------
 
@@ -695,11 +721,75 @@
         mail_bcc_selectize = search_mail_bcc[0].selectize;
     }
 
+    function fetch_conversation(){
+        $.ajax({
+            type: 'GET',
+            url: `https://sahra.mobikob.com/mobimail/conversation/${conversation_id}/fetch/`,
+            success: function(resp) {
+                console.log(resp);
+                var opponent = `${resp.opponent.email}`;
+                $("#mail_to").val(opponent);
+                $("#mail_to").prop("disabled",true);
 
+                $("#mail_subject").val(resp.subject);
+                $("#mail_subject").prop("disabled",true);
+
+                
+
+                if ($(`#select_mailbox option[value='${resp.mailboxes[0]}']`).length > 0){
+                    $("#select_mailbox").val(resp.mailboxes[0]);
+                    $("#select_mailbox").prop("disabled",true);
+                }
+
+                
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+
+            },
+
+        });
+    }
+
+    function fetch_related_mail(){
+        $.ajax({
+            type: 'GET',
+            url: `https://sahra.mobikob.com/mobimail/conversation/${conversation_id}/mail/${mail_id}/fetch/`,
+
+            success: function(resp) {
+                console.log(resp);
+                $("#mail_subject").val("Fwd: "+resp.subject);
+                CKEDITOR.instances.editor1.setData(resp.body.html);
+                render_forward_attachments(resp.attachments);
+             
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+
+            },
+
+        });
+    }
+
+    function render_forward_attachments(attachments){
+        
+        $.each(attachments, function(index, item) {
+            uploaded_file_size = item.size + uploaded_file_size;
+            var file_name = filename_checker(item.filename);
+            create_file_div(file_name, item.size, false);
+            $(`div[file_name_hash|=${item.filename.hashCode()}]`).attr("id", item.content);
+            $(`div[progress_hash="${file_name.hashCode()}"]`).remove();
+        });
+    }
 
 
     $(document).ready(function() {
-
+        
+        
 
 
         $.ajax({
@@ -718,7 +808,11 @@
                         });
                     }
                 })
-                render_mail_to(data);
+
+                if (page_type!="reply"){
+                    render_mail_to(data);
+                }
+                
                 render_mail_cc(data);
                 render_mail_bcc(data);
             },
@@ -770,13 +864,9 @@
             var total_size = uploaded_file_size + check_file_size
             if (total_size <= allowed_size) {
                 $.each(file_names_to_create_file_uploads, function(index, item) {
-                    create_file_div(item.file_name, item.file_size);
+                    create_file_div(item.file_name, item.file_size,true);
                 });
-                $.notify({
-                    message: "Dosya eklendi"
-                }, {
-                    type: "info"
-                });
+                
                 $("#send_button").prop("disabled", true);
                 $("#custom_file_btn").prop("disabled", true);
                 $.ajax({
@@ -797,6 +887,12 @@
 
                             $(`div[progress_hash="${item.filename.hashCode()}"]`)
                                 .remove();
+                            
+                            $.notify({
+                                message: "Dosya eklendi"
+                            }, {
+                                type: "info"
+                            });
                         });
                     },
                     complete: function(resp) {
@@ -827,6 +923,12 @@
                     $("#select_mailbox").append(o);
                 });
                 $("#select_mailbox").val("none");
+                if (page_type=="reply"){
+                    fetch_conversation();
+                }
+                else if (page_type=="forward"){
+                    fetch_related_mail();
+                }
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest.responseText);

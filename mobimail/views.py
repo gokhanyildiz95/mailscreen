@@ -1,7 +1,7 @@
 from django.shortcuts import render,HttpResponse
 
 # Create your views here.
-def new_conversation(request):
+def new_mail(request,conversation_id,mail_id):
     context = {
         "number" : 10
     }

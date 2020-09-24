@@ -19,6 +19,8 @@ from django.conf.urls import url
 from mobimail import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'conversation/new/', views.new_conversation),
+    url(r'conversation/(?P<conversation_id>new)(?P<mail_id>.*)/', views.new_mail),
+    url(r'conversation/(?P<conversation_id>.*)/(?P<mail_id>.*)reply/', views.new_mail),
+    url(r'conversation/(?P<conversation_id>.*)/mail/(?P<mail_id>.*)/forward/', views.new_mail),
     url(r'conversation/(?P<conversation_id>.*)/', views.view_conversation),
 ]

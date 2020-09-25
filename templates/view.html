@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@3.1.3/bootstrap-notify.min.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css" id="theme-styles">
@@ -96,7 +98,8 @@
                         <span id="conversation_subject"></span>
                     </div>
                 </div>
-                <div class="col-md row align-items-center"><span class="mail_prop font-weight-bold">Muhattap :&nbsp;</span><span id="conversation_opponent"></span>
+                <div class="col-md row align-items-center"><span class="mail_prop font-weight-bold">Muhattap
+                        :&nbsp;</span><span id="conversation_opponent"></span>
                 </div>
                 <div class="col-md row align-items-center">
                     <div>
@@ -107,7 +110,8 @@
                     </div>
                 </div>
                 <div class="col-md d-flex justify-content-center align-items-center">
-                    <button type="button" onclick="reply_conversation()" class="btn btn-outline-success"><span class="fa fa-reply"></span>Yanıtla</button>
+                    <button type="button" onclick="reply_conversation()" class="btn btn-outline-success"><span
+                            class="fa fa-reply"></span>Yanıtla</button>
                     <button onclick="fetch_all_mails()" id="show_all_mails_btn" title="Tüm konuşmayı görmek için tıklayınız" type="button" class=" ml-1 btn btn-outline-info"><span class="fa fa-list-ul"></span> Tümünü Göster</button>
                 </div>
             </div>
@@ -120,10 +124,30 @@
 </body>
 
 <html>
-<!-------------------------- SCRIPT --------------------------------------------------------------------------------------------------------------->
+<!-------------------------- SCRIPT --------------..------------------------------------------------------------------------------------------------->
 
 <script>
+    var mobicast = new window.BroadcastChannel('mobichannel');
+    mobicast.onmessage = (message) => {
+        var msg = message.data;
+        if (msg.startsWith("conversation_replied_")) {
+            var which_conv = msg.replace("conversation_replied_", "");
+            if (which_conv == conversation_id) {
+                fetch_all_mails();
+                $.notify({
+                    message: "Yazışma yanıtlandı"
+                }, {
+                    type: "info"
+                });
+            }
+        }
+
+
+    }
+
     var conversation_id = location.pathname.split('/')[2];
+
+
 
     function create_mail_view(mail_obj) {
         var from_whom = "div_mail_opponent";

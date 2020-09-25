@@ -137,8 +137,8 @@
         var date = mail_obj.mail_pdate;
         var mail_dates = new Date(date).toISOString().substring(0, 16).replace("T", " ");
         var year = mail_dates.substring(0, 4);
-        var mounth = mail_dates.substring(8, 10);
-        var day = mail_dates.substring(5, 7);
+        var day = mail_dates.substring(8, 10);
+        var mounth = mail_dates.substring(5, 7);
         var time = mail_dates.substring(11, 16);
         var mail_date = `${day}.${mounth}.${year} ${time}`;
 
@@ -192,7 +192,11 @@
         $.each(mail_obj.attachments, function(key, item) {
             var filename = item.filename;
             if (filename.length > 20) {
-                filename = filename.substring(0, 20) + "...";
+                filename = filename.substring(0, 15) + "...";
+                var split = item.filename.split(".");
+                if (split.length > 1) {
+                    filename = filename + split[split.length - 1];
+                }
             }
             var part1 = item.attachment_id.$uuid.substring(0, 8);
             var part2 = item.attachment_id.$uuid.substring(8, 12);

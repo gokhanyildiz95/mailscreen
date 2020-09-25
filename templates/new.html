@@ -483,10 +483,19 @@
     }
 
     function filename_checker(file_name) {
+        var new_file_name = file_name;
         if ($(`div[file_name_hash|=${file_name.hashCode()}]`).length) {
-            filename_checker(`${file_name}1`);
+            var split = file_name.split(".");
+            var changed = file_name;
+            if (split.length>1){
+                var name_part = split[split.length-2] + "1";
+                var ext_part = split[split.length-1];
+                changed = name_part + "." + ext_part;
+            }
+
+            return filename_checker(changed);
         }
-        return file_name;
+        return new_file_name;
 
     }
 

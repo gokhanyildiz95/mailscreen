@@ -153,6 +153,17 @@
             current_mail_cc.push(item.email);
         });
         current_mail_cc = current_mail_cc.join("; ");
+        var mail_cc_div = "";
+        if (current_mail_cc) {
+            mail_cc_div = `<div class="row">
+                <div class="col-md-2 font-weight-bold mail_prop">
+                    Cc :
+                </div>
+                <div class="col-md-10">
+                    <span>${current_mail_cc}</span>
+                </div>
+            </div>`;
+        }
 
         // mail bcc
         var current_mail_bcc = new Array();
@@ -160,6 +171,17 @@
             current_mail_bcc.push(item.email);
         });
         current_mail_bcc = current_mail_bcc.join("; ");
+        var mail_bcc_div = "";
+        if (current_mail_bcc) {
+            mail_bcc_div = `<div class="row">
+                <div class="col-md-2 font-weight-bold mail_prop">
+                    Bcc :
+                </div>
+                <div class="col-md-10">
+                    <span>${current_mail_bcc}</span>
+                </div>
+            </div>`;
+        }
 
         // mail subject
         var current_mail_subject = mail_obj.subject;
@@ -216,14 +238,8 @@
                                         <span>${current_mail_subject}</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2 font-weight-bold mail_prop">
-                                        Cc :
-                                    </div>
-                                    <div class="col-md-10">
-                                        <span>${current_mail_cc}</span>
-                                    </div>
-                                </div>
+                                ${mail_cc_div}
+                                ${mail_bcc_div}
                                 <div class="row">
                                     <div class="col-md-2 font-weight-bold mail_prop">
                                         Ekler :

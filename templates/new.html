@@ -752,6 +752,40 @@
         });
     }
 
+    function fetch_last_mail(){
+        $.ajax({
+            type: 'GET',
+            url: `https://sahra.mobikob.com/mobimail/conversation/${conversation_id}/mail/last/fetch/`,
+
+            success: function(resp) {
+                console.log(resp);
+                var selected_cc = new Array();
+                $.each(resp.mail_cc,function(key,item){
+                    var name = item.name ? item.name : item.email;
+                    mail_cc_selectize.addOption({name:name,email:item.email});
+                    selected_cc.push(item.email);
+                })
+                mail_cc_selectize.setValue(selected_cc);
+
+                var selected_bcc = new Array();
+                $.each(resp.mail_bcc,function(key,item){
+                    var name = item.name ? item.name : item.email;
+                    mail_bcc_selectize.addOption({name:name,email:item.email});
+                    selected_bcc.push(item.email);
+                })
+                mail_bcc_selectize.setValue(selected_bcc);
+             
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            },
+            complete: function() {
+
+            },
+
+        });
+    }
+
     function fetch_related_mail(){
         $.ajax({
             type: 'GET',
@@ -814,6 +848,7 @@
                 
                 render_mail_cc(data);
                 render_mail_bcc(data);
+                fetch_last_mail();
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest.responseText);
